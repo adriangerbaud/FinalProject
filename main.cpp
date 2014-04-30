@@ -251,7 +251,7 @@ int main(int argc, char* args[])
 	
 
 	tackle = playerUSC.collisioncheck(playerND.getOffSetX(),playerND.getOffSetY(), 160,120,120); // will force a tacke
-	fall = playerUSC.collisioncheck(playerND.getOffSetX(), playerND.getOffSetY(),100,120,120); // will end a game
+	fall = playerUSC.collisioncheck(playerND.getOffSetX(), playerND.getOffSetY(),90,120,120); // will end a game
 	
 	playerND.move();
 	playerUSC.move();
