@@ -337,10 +337,10 @@ void player::setIsVisible(bool vis)
 } 
 
 
-int player::collisioncheck(int computerX, int computerY, int sensitivity)
+int player::collisioncheck(int computerX, int computerY, int sensitivity, int computerwidth, int computerheight)
 { // returns 1 if something gets close enough to the player
-  double xdiff = (double)computerX - ((double)offSetX);
-  double ydiff =  (double)computerY - ((double)offSetY);
+  double xdiff = ((double)computerX+(computerwidth/2)) - ((double)offSetX+(width/2));
+  double ydiff =  ((double)computerY+(computerheight/2)) - ((double)offSetY+(height/2));
   double distance = sqrt(pow(xdiff,2) + pow(ydiff,2));
   
   if (distance <= sensitivity) return 1;

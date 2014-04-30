@@ -19,7 +19,7 @@ class MenuScreen : public Sprite
   virtual int getOffSetX(); //returns x pos
   virtual int getOffSetY(); //returns y pos
   virtual int collision(); //virtual function from inheritance. Will not be needed
-  virtual int collisioncheck(int,int,int); // virtual function from inheritance. Will not be needed
+  virtual int collisioncheck(int,int,int,int,int); // virtual function from inheritance. Will not be needed
   
   bool handle_event(SDL_Event &); //detects spacebar press
   void setHasPlayed(bool); //sets hasPlayed variable

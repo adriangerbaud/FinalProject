@@ -83,7 +83,7 @@ bool MenuScreen::handle_event(SDL_Event &event)
 
 int MenuScreen::collision(){} //virtual function from inheritance. Not used
 
-int MenuScreen::collisioncheck(int,int,int){} // virtual function from inheritance. Not used
+int MenuScreen::collisioncheck(int,int,int,int,int){} // virtual function from inheritance. Not used
 
 void MenuScreen::move(){} //virtual function from inheritance
 

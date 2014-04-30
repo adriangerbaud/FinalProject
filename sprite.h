@@ -20,7 +20,7 @@ class Sprite
   virtual int collision()=0; //handles collision with another object
   virtual int getOffSetX()=0; //returns x pos
   virtual int getOffSetY()=0; //returns y pos
-  virtual int collisioncheck(int,int,int)=0; // returns 1 if what is specified gets too close
+  virtual int collisioncheck(int,int,int,int,int)=0; // returns 1 if what is specified gets too close
   
   void apply_surface(SDL_Surface *,SDL_Surface *,SDL_Rect *); //applies new surface
   SDL_Surface * load_image(std::string,int,int,int); //takes in image of sprite

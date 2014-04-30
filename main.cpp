@@ -230,7 +230,7 @@ int main(int argc, char* args[])
       
 	for(int i=0; i<obstacles.size(); i++)
 	  {
-	    int collide = playerND.collisioncheck(obstacles.at(i)->getOffSetX(), obstacles.at(i)->getOffSetY(), 75); 
+	    int collide = playerND.collisioncheck(obstacles.at(i)->getOffSetX(), obstacles.at(i)->getOffSetY(), 75, 15,16); 
 	    // collide = 1 if obstacle is close enough
 	    if(collide == 1)
 	      
@@ -250,8 +250,8 @@ int main(int argc, char* args[])
 	
 	
 
-	tackle = playerUSC.collisioncheck(playerND.getOffSetX(),playerND.getOffSetY(), 120); // will force a tacke
-	fall = playerUSC.collisioncheck(playerND.getOffSetX(), playerND.getOffSetY(),60); // will end a game
+	tackle = playerUSC.collisioncheck(playerND.getOffSetX(),playerND.getOffSetY(), 160,120,120); // will force a tacke
+	fall = playerUSC.collisioncheck(playerND.getOffSetX(), playerND.getOffSetY(),100,120,120); // will end a game
 	
 	playerND.move();
 	playerUSC.move();

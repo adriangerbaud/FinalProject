@@ -19,7 +19,7 @@ class scoreCounter : public Sprite{
   virtual int getOffSetX(); //Returns x position
   virtual int getOffSetY(); //Returns y position
   virtual int collision(); //Not used. Only included because of inheritance
-  virtual int collisioncheck(int,int,int); //Not used. Only included because of inheritance
+  virtual int collisioncheck(int,int,int,int,int); //Not used. Only included because of inheritance
 
   void setScore(int); //Update score value
   void setTitle(bool);

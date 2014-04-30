@@ -135,7 +135,7 @@ void Coin::show(SDL_Surface *screen,bool,bool)
 	}
 }
 
-int Coin::collisioncheck(int computerX, int computerY, int sensitivity)
+int Coin::collisioncheck(int computerX, int computerY, int sensitivity,int,int)
 {
     double xdiff = (double)computerX - (double)offSetX;
     double ydiff =  (double)computerY - (double)offSetY;

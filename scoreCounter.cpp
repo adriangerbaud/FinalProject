@@ -158,4 +158,4 @@ void scoreCounter::show(SDL_Surface *screen, bool, bool)
     }
 }
 
-int scoreCounter::collisioncheck(int,int,int){} //Not used. Included because of inheritance
+int scoreCounter::collisioncheck(int,int,int,int,int){} //Not used. Included because of inheritance

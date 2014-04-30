@@ -18,7 +18,7 @@ class Coin: public Sprite{
   virtual int getOffSetX(); //returns x position
   virtual int getOffSetY(); //returns y position
   virtual int collision(); //player collision with coin
-  virtual int collisioncheck(int,int,int); // Returns 1 if player gets close enough
+  virtual int collisioncheck(int,int,int,int,int); // Returns 1 if player gets close enough
 
 private:
   //States

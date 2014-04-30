@@ -20,7 +20,7 @@ class player : public Sprite {
   virtual int getOffSetX(); //returns x pos
   virtual int getOffSetY(); //returns y pos 
   virtual int collision(); // Not used. Taken from inheritance
-  virtual int collisioncheck(int,int,int); //checks for collision between player and an obstacle
+  virtual int collisioncheck(int,int,int,int,int); //checks for collision between player and an obstacle
   
   void handle_events(SDL_Event &); //handles the arrow keys
   void handle_AI(int,int); //main function for artificial intelligence movement
