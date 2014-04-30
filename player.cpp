@@ -273,32 +273,32 @@ void player::set_clips()
 
     states[4][0].x = 0; 
     states[4][0].y = 1200;
-    states[4][0].w = width;
+    states[4][0].w = width+10;
     states[4][0].h = 2*height;
 
     states[4][1].x = 120;
     states[4][1].y = 1200;
-    states[4][1].w = width;
+    states[4][1].w = width+10;
     states[4][1].h = 2*height;
 
     states[4][2].x = 240; 
     states[4][2].y = 1200;
-    states[4][2].w = width;
+    states[4][2].w = width+10;
     states[4][2].h = 2*height;
 
     states[4][3].x = 360;
     states[4][3].y = 1200;
-    states[4][3].w = width;
+    states[4][3].w = width+10;
     states[4][3].h = 2*height;
 
     states[4][4].x = 480; 
     states[4][4].y = 1200;
-    states[4][4].w = width;
+    states[4][4].w = width+10;
     states[4][4].h = 2*height;
 
     states[4][5].x = 600; 
     states[4][5].y = 1200;
-    states[4][5].w = width;
+    states[4][5].w = width+10;
     states[4][5].h = 2*height;
   
 }

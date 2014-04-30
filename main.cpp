@@ -96,7 +96,7 @@ int main(int argc, char* args[])
   bool tackle = false;
   bool fall = false;
 
-  /*----------Begin Game---------*/  
+  /*---------------Begin Game---------------*/  
   
   while(quit == false)
     {
@@ -154,39 +154,38 @@ int main(int argc, char* args[])
 	   	
 	      }
 	    
-	    menu.show(screen,false, false);
-	    SDL_Flip(screen);
+	    menu.show(screen,false, false); //show menu
+	    SDL_Flip(screen); //update screen
 	    
-	    
+	    // cap frame rate
 	    if (mps.get_ticks() < 1000/ FRAMES_PER_SECOND)
 	      {
 		SDL_Delay( ( 1000/FRAMES_PER_SECOND) - mps.get_ticks() );
 	      }
 	    
-	    if(score > 0)
+	    if(score > 0) // if the score is > 0, set it to zero and make players visible.
 	      {
-		score = 0;
-		
+		score = 0;	
 		playerND.setIsVisible(true);
-		playerUSC.setIsVisible(true);
-	
-		
+		playerUSC.setIsVisible(true);	
 	      }
+	    
 	    playerND.setStarting(true);
 	    playerUSC.setStarting(true);
 	    
-	  }
-	
-	// BEGIN GAME
-	
-	Mix_HaltMusic();
-	
-	scoreCount.setTitle(true);
-	menu.setHasPlayed(true);
-	fps.start();
-	
-	//If score is '10' ie. game just started 
-	if( score ==0 ) { 
+	}
+      
+      // BEGIN GAMEPLAY
+      
+      Mix_HaltMusic();
+      
+      scoreCount.setTitle(true);
+      menu.setHasPlayed(true);
+      fps.start();
+      
+      //If score is '10' ie. game just started 
+      if( score ==0 ) 
+	{ 
 	  Mix_HaltChannel( 4);
 	  //Play the crowd and practice sound effect 
 	  if( Mix_PlayChannel( 1, practicesound, 1 ) == -1 ) 
@@ -202,67 +201,66 @@ int main(int argc, char* args[])
 	      return 1; 
 	    } 
 	}
-	
-	//While there's events to handle
-        while(SDL_PollEvent(&event))
-	  {
-	    
-	    
+      
+      //While there's events to handle
+      while(SDL_PollEvent(&event))
+	  {  
 	    playerUSC.counter++;
-	    //   playerUSC2.counter++;
 	    playerND.handle_events(event);
+	    
 	    //If the user has Xed out the window
-	    
-	    
 	    if(event.type == SDL_QUIT)
 	      {
 		//Quit the program
 		quit = true;
 	      }
-	    
-
-	    
 	  }
-	
-	
-	int spawnCoin = rand()%1000 + 1;
-	if(spawnCoin < 35)
-	  {
-	    int randX= (rand()%900) + 100;
-	    int randY= (rand()%650) + 100;
+      
+      int spawnCoin = rand()%1000 + 1;
+      
+      if(spawnCoin < 35) // spawn coins some of the time. (35/1000 of the time)
+	{
+	  int randX= (rand()%900) + 100;
+	  int randY= (rand()%650) + 100;
 	    
-	    Coin* money = new Coin("coins.bmp", 48,120,128, randX, randY);
-	    obstacles.push_back(money);
-	    	    
-	  }
-	
-	  for(int i=0; i<obstacles.size(); i++)
-	  {
-	  int collide = playerND.collisioncheck(obstacles.at(i)->getOffSetX(), obstacles.at(i)->getOffSetY(), 75);
+	  Coin* money = new Coin("coins.bmp", 48,120,128, randX, randY); //create coin in heap
+	  obstacles.push_back(money); // place it in vector
 	  
-	  if(collide == 1)
-	   
+	}
+      
+	for(int i=0; i<obstacles.size(); i++)
+	  {
+	    int collide = playerND.collisioncheck(obstacles.at(i)->getOffSetX(), obstacles.at(i)->getOffSetY(), 75); 
+	    // collide = 1 if obstacle is close enough
+	    if(collide == 1)
+	      
 	    {
-	      obstacles.at(i)->collision();
+	      obstacles.at(i)->collision(); // change necessary values
 	      score = score + 100;
 	      Mix_PlayChannel(-1,coin,0);
 	      collide = 0;
 	      
 	    }
-	  
-	
+	    
+	    
 	  }
 	
 	
-	playerUSC.handle_AI(playerND.getOffSetX(),playerND.getOffSetY());
-	tackle = playerUSC.collisioncheck(playerND.getOffSetX(),playerND.getOffSetY(), 120);
-	fall = playerUSC.collisioncheck(playerND.getOffSetX(), playerND.getOffSetY(),60);
+	playerUSC.handle_AI(playerND.getOffSetX(),playerND.getOffSetY()); // Activate USC Player automatic movement
+	
+	
+
+	tackle = playerUSC.collisioncheck(playerND.getOffSetX(),playerND.getOffSetY(), 120); // will force a tacke
+	fall = playerUSC.collisioncheck(playerND.getOffSetX(), playerND.getOffSetY(),60); // will end a game
 	
 	playerND.move();
 	playerUSC.move();
 	
-	score += 7;
+	score += 7; // increment score and set it
 	scoreCount.setScore(score);
+	
+	// Call show functions
+	
 	background.show(screen);
 	for(int i = 0; i<obstacles.size(); i++) 
 	  {
@@ -273,15 +271,11 @@ int main(int argc, char* args[])
 	playerUSC.show(screen, tackle, false); // usc will never fall
 	
 	scoreCount.show(screen, false, false);
+	
 	playerUSC.handle_AIadjust();
-	
-	
-	
-	
+      
 	//Update the screen
-        SDL_Flip(screen);
-	//SDL_Flip(playerND.sprite);	
-	
+        SDL_Flip(screen);	
 	
 	//Cap the frame rate
         if(fps.get_ticks() < 1000 / FRAMES_PER_SECOND)
@@ -290,7 +284,7 @@ int main(int argc, char* args[])
 	  }
 	
 	
-	// free obstacles
+	// free obstacles if they have been collided with
 	for(int i =0; i < obstacles.size(); i++)
 	  {
 	    if (obstacles.at(i)->getHasCollided())
@@ -305,6 +299,8 @@ int main(int argc, char* args[])
 
 	if(fall == true)
 	  {
+	    // Reset values for replay
+	    
 	    Mix_HaltChannel( 1);
 	    Mix_HaltChannel(3);
 	    if( Mix_PlayChannel( 4, boom, 1 ) == -1 ) 
@@ -327,7 +323,7 @@ int main(int argc, char* args[])
 	    playerUSC.handle_AIadjust();
 	    playerND.handle_AIadjust();
 
-
+	    // clear vector
 	    for(int j=0; j<obstacles.size(); j++)
 	      { //deletes all obstacles
 		delete obstacles.at(j);
