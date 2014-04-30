@@ -1,3 +1,6 @@
+//Authors: Adrian Gerbaud, Jandra Aranguren, Edwin Onattu
+// Puts it all together
+
 #include "background.h"
 #include "SDL/SDL.h"
 #include "SDL/SDL_mixer.h"
@@ -10,13 +13,27 @@
 #include "coin.h"
 #include <ctime>
 #include <cstdlib>
+#include<iostream> //used mainly for debugging
 
-#include<iostream>
 
-
-int main(int argc, char* args[]){
+int main(int argc, char* args[])
+{  
+  srand (time(NULL)); // seed random number generator // comment out for debugging
   
-  // Music to be played
+  //Initialize all SDL stuff. See Global.h for that function
+  if(init() == false)
+    {
+      return 1;
+    }
+  /*--------------AUDIO----------------*/
+  
+  //Initialize SDL_mixer
+  if(Mix_OpenAudio(22050,MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 )
+    {
+      return 1;
+    }
+  
+  // Initialize Music to be played
   Mix_Music *titlemusic = NULL;
   Mix_Chunk *practicesound = NULL;
   Mix_Chunk *crowd = NULL;
@@ -24,28 +41,11 @@ int main(int argc, char* args[]){
   Mix_Chunk *boom = NULL;
   Mix_Chunk *hit = NULL;
   Mix_Chunk *coin = NULL;
- 
- // Sound Effects to be played
   
-
-  //Initialize SDL_mixer
-  if(Mix_OpenAudio(22050,MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 )
-    {
-      return 1;
-    }
-  srand (time(NULL));
-  		
-  //Quit flag
+  // Set Quit flags
   bool quit = false;
   bool start = false;
   
-  //Initialize
-  if(init() == false){
-    return 1;
-  }
-  
-
-
   //Loading the music
   titlemusic = Mix_LoadMUS("Title1.wav");
   practicesound = Mix_LoadWAV("practice1.wav");
@@ -54,7 +54,7 @@ int main(int argc, char* args[]){
   boom = Mix_LoadWAV("boom.wav");
   hit = Mix_LoadWAV("hit1.wav");
   coin = Mix_LoadWAV("coin.wav");
-
+  
   //If there was a problem loading the sound effects
   if( ( practicesound == NULL ) || ( crazytrain == NULL )||( crowd == NULL ) || (boom==NULL)|| (hit==NULL)) 
     { 
@@ -62,65 +62,68 @@ int main(int argc, char* args[]){
     } 
   
   // If there was a problem loading the music
+  
   if (titlemusic == NULL)
     {
       return 1;
     }
   
   
+  /* ----------Initialize Variables------------ */
   
+  vector<Sprite*> obstacles; // This will hold coins. Can be easily expanidble to hold other objects (i.e cones, powerups, etc...)
   
-  vector<Sprite*> obstacles; // This will hold coins
-  player playerND("ND_Player.bmp", 255, 255, 255, SCREEN_HEIGHT/2, SCREEN_WIDTH/2);
+  // Player
+  player playerND("ND_Player.bmp", 255, 255, 255, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
   player playerUSC("USC_Player.bmp", 255, 255, 255,0 ,0);
-  // player playerUSC2("player1.bmp", 255, 255, 255,255 ,0);
-  bool tackle = false;
-  bool fall = false;
   
-  //The frame rate regulator
-  Timer fps;
+  //Timer
+  Timer fps; 
   
   //The background
   Background background("background.bmp",screen);
   background.show(screen);
   
+  // Menu
   MenuScreen menu("Welcome.bmp", 255,255,0);
   
-    playerUSC.counter = 1;
-    //     playerUSC2.counter = 1;
-    scoreCounter scoreCount("ND_Player.bmp",255,255,255);
-    int score = 0;
-    int soundCounter = 0;
-    // Start game
-    
+  // ScoreCounter
+  scoreCounter scoreCount("ND_Player.bmp",255,255,255);
+  int score = 0;
+  int soundCounter = 0;
+  
+  playerUSC.counter = 1;
+  bool tackle = false;
+  bool fall = false;
 
-    while(quit == false)
-      {
-	
-	
-	
-	while(start == false)
-	  {
-	    //If the user has Xed out the window
-	    if(event.type == SDL_QUIT)
-	      {
-		//Quit the program
-		return 1;
-	      }
-	    
-	    //If music not playing yet
-	    
-	    if (Mix_PlayingMusic() == 0 && soundCounter==0)
-	      {
-		//Play music
-		if(Mix_PlayMusic(titlemusic,-1) == -1)
-		  {
-		    return 1;
-		  }
-		
-	      }
+  /*----------Begin Game---------*/  
+  
+  while(quit == false)
+    {
+      while(start == false)
+	{
+	  //If the user has Xed out the window
+	  if(event.type == SDL_QUIT)
+	    {
+	      //Quit the program
+	      return 1;
+	    }
+	  
+	  //If music not playing yet
+	  if (Mix_PlayingMusic() == 0 && soundCounter==0)
+	    {
+	      //Play music
+	      if(Mix_PlayMusic(titlemusic,-1) == -1)
+		{
+		  return 1;
+		}
+	      
+	    }
+	  
 	    soundCounter++;
-	    Timer mps;
+	    
+	    
+	    Timer mps; // Caps frame rate
 	    mps.start();
 	    scoreCount.setTitle(false);
 	    
@@ -166,12 +169,11 @@ int main(int argc, char* args[]){
 		
 		playerND.setIsVisible(true);
 		playerUSC.setIsVisible(true);
-		//				playerUSC2.setIsVisible(true);
+	
 		
 	      }
 	    playerND.setStarting(true);
 	    playerUSC.setStarting(true);
-	    //	    	    playerUSC2.setStarting(true);
 	    
 	  }
 	
@@ -226,15 +228,12 @@ int main(int argc, char* args[]){
 	int spawnCoin = rand()%1000 + 1;
 	if(spawnCoin < 35)
 	  {
-	    int randX= rand()%1000 + 200;
-	    int randY= rand()%400 + 200;
+	    int randX= (rand()%900) + 100;
+	    int randY= (rand()%650) + 100;
 	    
 	    Coin* money = new Coin("coins.bmp", 48,120,128, randX, randY);
 	    obstacles.push_back(money);
-	    
-	    
-	    //cout << "here1asdfasdfasdfasdfasdfasdfasdfasdfasdf\n" << endl;
-	    
+	    	    
 	  }
 	
 	  for(int i=0; i<obstacles.size(); i++)

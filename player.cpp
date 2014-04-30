@@ -1,3 +1,6 @@
+//Authors: Alejandra Aranguren, Adrian Gerbaud, Edwin Onattu
+// This is the implementation of the player class. 
+
 #include "sprite.h"
 #include "player.h"
 #include "SDL/SDL.h"
@@ -7,15 +10,15 @@
 #include <cstdlib>
 #include<iostream>
 
-player::player(std::string filename, int r, int g, int b, int x, int y):Sprite(8), SPRITE_DOWN(0), SPRITE_UP(1), SPRITE_RIGHT(2), SPRITE_LEFT(3), TDown(4), TUp(5), TRight(6), TLeft(7)
+player::player(std::string filename, int r, int g, int b, int x, int y):Sprite(8), SPRITE_DOWN(0), SPRITE_UP(1), SPRITE_RIGHT(2), SPRITE_LEFT(3), TDown(4), TUp(5), TRight(6), TLeft(7) //constructor
 {
     //Initialize sprite dimensions
     height = 120;
     width = 100;
 
     //Initialize movement variables
-    offSetY = x;
-    offSetX = y;
+    offSetY = y;
+    offSetX = x;
     velocityX = 0;
     velocityY = 0;
 	
@@ -32,20 +35,12 @@ player::player(std::string filename, int r, int g, int b, int x, int y):Sprite(8
     set_clips();
     
     isVisible = true;
-    isDead = false;
+
 }
 
-void player::setDead(bool dead)
-{
-	if(dead) isDead = true;
-	else isDead = false;
-}
-
-void player::set_clips(){ //sets sprite sheet clip positions
-
-
-
-    
+void player::set_clips()
+{ //sets sprite sheet clip positions
+  
   //Clip the sprites
   
   //down
@@ -163,7 +158,7 @@ void player::set_clips(){ //sets sprite sheet clip positions
 
     states[3][3].x = 360;
     states[3][3].y = 360;
-    states[3][3].w = width;
+    states[3][3].w = width+10;
     states[3][3].h = height;
 
     states[3][4].x = 480; 
@@ -176,10 +171,8 @@ void player::set_clips(){ //sets sprite sheet clip positions
     states[3][5].w = width;
     states[3][5].h = height;
 
-    // We can make the height more precise
-
-    //TRight
-
+    //Tackle Right
+    
     states[6][0].x = 0; 
     states[6][0].y = 480;
     states[6][0].w = 66;
@@ -195,7 +188,6 @@ void player::set_clips(){ //sets sprite sheet clip positions
     states[6][2].w = 122;
     states[6][2].h = height;
     
-
     states[6][3].x = 35; 
     states[6][3].y = 600;
     states[6][3].w = 149;
@@ -211,7 +203,7 @@ void player::set_clips(){ //sets sprite sheet clip positions
     states[6][5].w = 145;
     states[6][5].h = height;
 
-    // TLeft
+    // Tackle Left
 
     states[7][0].x = 172; 
     states[7][0].y = 720;
@@ -245,7 +237,7 @@ void player::set_clips(){ //sets sprite sheet clip positions
     states[7][5].h = height;
 
     
-    // TUp
+    // Tackle Up
 
     states[5][0].x = 0; 
     states[5][0].y = 960;
@@ -277,7 +269,7 @@ void player::set_clips(){ //sets sprite sheet clip positions
     states[5][5].w = width;
     states[5][5].h = 2*height;
 
-    // TDown
+    // Tackle Down
 
     states[4][0].x = 0; 
     states[4][0].y = 1200;
@@ -337,31 +329,31 @@ void player::setStarting(bool val)
   isStarting = val;
 }
 
-int player::collision(){return 0;} 
+int player::collision(){return 0;} //Not used. Implemented b/c it is a pure virtual function 
 
-void player::setIsVisible(bool vis){isVisible = vis;} 
+void player::setIsVisible(bool vis)
+{
+  isVisible = vis;
+} 
 
 
 int player::collisioncheck(int computerX, int computerY, int sensitivity)
-{
-    double xdiff = (double)computerX - (double)offSetX;
-    double ydiff =  (double)computerY - (double)offSetY;
-    double distance = sqrt(pow(xdiff,2) + pow(ydiff,2));
-
-    if (distance <= sensitivity) return 1;
+{ // returns 1 if something gets close enough to the player
+  double xdiff = (double)computerX - ((double)offSetX);
+  double ydiff =  (double)computerY - ((double)offSetY);
+  double distance = sqrt(pow(xdiff,2) + pow(ydiff,2));
+  
+  if (distance <= sensitivity) return 1;
     else return 0;
 
 }
 
 void player::handle_AI(int userx, int usery)
-{
+{ // controls the automatic movement of the USC Player
 double xdiff = (double)offSetX - (double)userx;
 double ydiff = (double)offSetY - (double)usery;
-//xdiff = sqrt(pow(xdiff,2));
-//ydiff = sqrt (pow(ydiff,2));
 
 double distance = sqrt(pow(xdiff,2) + pow(ydiff,2));
-
 double velocity = counter;
 if (velocity>20)
 {
@@ -378,10 +370,10 @@ double dist8oclock =sqrt(pow((xdiff-velocity),2)+pow((ydiff+velocity),2));
 double dist11oclock = sqrt(pow((xdiff-velocity),2)+pow((ydiff-velocity),2));
 
 int direction = 4;
-cout << "userx,usery: " << userx << "," << usery<< "compX,compY:"<< offSetX<<","<< offSetY<<endl;
+
  if ((counter % 20) ==1) 
    {	
-     direction = (rand() % 8 +1); // does random move
+     direction = (rand() % 8 +1); // does random move sometimes, instead of picking the move that will move it closest
    }
  else
    {
@@ -390,9 +382,9 @@ cout << "userx,usery: " << userx << "," << usery<< "compX,compY:"<< offSetX<<","
 	 direction = 4;
        }
      else if ((distleft <=distance) && (distleft<=distright) && (distleft <=distdown) && (distleft <=distup)&& (distleft <=dist2oclock) && (distleft <=dist5oclock) && (distleft <=dist8oclock) && (distleft <=dist11oclock))
-	{
-	  direction = 3;
-	}
+       {
+	 direction = 3;
+       }
      else if((distdown <=distance) && (distdown<=distleft) && (distdown <=distright) && (distdown <=distup)&& (distdown <=dist2oclock) && (distdown <=dist5oclock) && (distdown <=dist8oclock) && (distdown <=dist11oclock))
        {
 	 direction = 2;
@@ -400,24 +392,24 @@ cout << "userx,usery: " << userx << "," << usery<< "compX,compY:"<< offSetX<<","
      else if ((distup <=distance) && (distup<=distleft) && (distup <=distdown) && (distup <=distright)&& (distup <=dist2oclock) && (distup <=dist5oclock) && (distup <=dist8oclock) && (distup <=dist11oclock))
        {
 	 direction = 1;
-	}
-	else if ((dist2oclock <=distance) && (dist2oclock<=distleft) && (dist2oclock <=distdown) && (dist2oclock <=distright)&& (dist2oclock <=distup) && (dist2oclock <=dist5oclock) && (dist2oclock <=dist8oclock) && (dist2oclock <=dist11oclock))
+       }
+     else if ((dist2oclock <=distance) && (dist2oclock<=distleft) && (dist2oclock <=distdown) && (dist2oclock <=distright)&& (dist2oclock <=distup) && (dist2oclock <=dist5oclock) && (dist2oclock <=dist8oclock) && (dist2oclock <=dist11oclock))
        {
 	 direction = 5;
-	}
-	else if ((dist5oclock <=distance) && (dist5oclock<=distleft) && (dist5oclock <=distdown) && (dist5oclock <=distright)&& (dist5oclock <=dist2oclock) && (dist5oclock <=distup) && (dist5oclock <=dist8oclock) && (dist5oclock <=dist11oclock))
+       }
+     else if ((dist5oclock <=distance) && (dist5oclock<=distleft) && (dist5oclock <=distdown) && (dist5oclock <=distright)&& (dist5oclock <=dist2oclock) && (dist5oclock <=distup) && (dist5oclock <=dist8oclock) && (dist5oclock <=dist11oclock))
        {
 	 direction = 6;
-	}
-	else if ((dist8oclock <=distance) && (dist8oclock<=distleft) && (dist8oclock <=distdown) && (dist8oclock <=distright)&& (dist8oclock <=dist2oclock) && (dist8oclock <=dist5oclock) && (dist8oclock <=distup) && (dist8oclock <=dist11oclock))
+       }
+     else if ((dist8oclock <=distance) && (dist8oclock<=distleft) && (dist8oclock <=distdown) && (dist8oclock <=distright)&& (dist8oclock <=dist2oclock) && (dist8oclock <=dist5oclock) && (dist8oclock <=distup) && (dist8oclock <=dist11oclock))
        {
 	 direction = 7;
-	}
-	else if ((dist11oclock <=distance) && (dist11oclock<=distleft) && (dist11oclock <=distdown) && (dist11oclock <=distright)&& (dist11oclock <=dist2oclock) && (dist11oclock <=dist5oclock) && (dist11oclock <=dist8oclock) && (dist11oclock <=distup))
+       }
+     else if ((dist11oclock <=distance) && (dist11oclock<=distleft) && (dist11oclock <=distdown) && (dist11oclock <=distright)&& (dist11oclock <=dist2oclock) && (dist11oclock <=dist5oclock) && (dist11oclock <=dist8oclock) && (dist11oclock <=distup))
        {
 	 direction = 8;
-	}
-   //cout << "\ndirection is" << direction << " dist: "<<distance << " xdiff,ydiff:"<<xdiff<<","<<ydiff ; 
+       }
+     
    }
  
  switch(direction)
@@ -426,30 +418,30 @@ cout << "userx,usery: " << userx << "," << usery<< "compX,compY:"<< offSetX<<","
    case 2: velocityY  += velocity; break; // down
    case 3: velocityX -= velocity; break; // left
    case 4: velocityX  += velocity; break; // right
-	case 5: 
-			{
-			velocityY -= velocity; 
-			velocityX += velocity; 
-			break;// 2 o' clock
-			}
-	case 6:
-		 	{
-		 	velocityY += velocity; 
-		 	velocityX += velocity; 
-		 	break;// 5 o' clock
-		 	}
-	case 7: 
-			{
-			velocityY += velocity; 
-			velocityX -= velocity; 
-			break;// 8 o'clock
-			}
-	case 8: 
-			{
-			velocityY -= velocity;
-			velocityX -= velocity; 
-			break;// 11 o'clock
-			}
+   case 5: 
+     {
+       velocityY -= velocity; 
+       velocityX += velocity; 
+       break;// 2 o' clock
+     }
+   case 6:
+     {
+       velocityY += velocity; 
+       velocityX += velocity; 
+       break;// 5 o' clock
+     }
+   case 7: 
+     {
+       velocityY += velocity; 
+       velocityX -= velocity; 
+       break;// 8 o'clock
+     }
+   case 8: 
+     {
+       velocityY -= velocity;
+       velocityX -= velocity; 
+       break;// 11 o'clock
+     }
    }
  
 }
@@ -471,7 +463,7 @@ void player::handle_events(SDL_Event &event)
         }
     }
   
-  //If a key was released, spot
+  //If a key was released
   else if( event.type == SDL_KEYUP )
     {
       //Adjust the velocity
@@ -488,6 +480,8 @@ void player::handle_events(SDL_Event &event)
 
 void player::handle_AIadjust()
 {
+  // reset velocities
+
 	velocityX=0;
 	velocityY=0;
 }
@@ -509,7 +503,7 @@ void player::move()
     {
       offSetY -= velocityY;
     }
-    cout << "\nmove X,y:"<< offSetX <<","<<offSetY<<endl;
+ 
 }
 
 
@@ -520,10 +514,7 @@ void player::show(SDL_Surface *screen, bool tackle, bool fall) // if i dont  wan
     {
       if(velocityY > 0)
 	{
-	  if (tackle) status = TDown;
-	    
-	  
-	  
+	  if (tackle) status = TDown;	  
 	  else status = SPRITE_DOWN;
 	  
 	  frame++;
@@ -563,7 +554,7 @@ void player::show(SDL_Surface *screen, bool tackle, bool fall) // if i dont  wan
 
 
 
-      // Apply the surface
+      // Apply the surface depending on state
       
       if( status == SPRITE_DOWN )
 	{
@@ -611,16 +602,16 @@ void player::show(SDL_Surface *screen, bool tackle, bool fall) // if i dont  wan
 
 
 int player::getStatus()
-{
+{ //returns number that represents current state
   return status;
 }
 
 void player:: setStatus(int num)
-{
+{//sets to a particular status
   status = num;
 }
 
 void player:: setFrame(int num)
-{
+{//sets frame
   frame = num;
 }

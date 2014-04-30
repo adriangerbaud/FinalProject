@@ -6,21 +6,24 @@
 #include "SDL/SDL_image.h"
 #include <string>
 
-Sprite::Sprite(int count):states(count,vector<SDL_Rect>(15)), SCREEN_WIDTH(1400),SCREEN_HEIGHT(800), SCREEN_BPP(32), FRAMES_PER_SECOND(10), SPRITE_DOWN(0), SPRITE_UP(1), SPRITE_RIGHT(2), SPRITE_LEFT(3), TDown(4), TUp(5), TRight(6), TLeft(7){} //constructor
+Sprite::Sprite(int count):states(count,vector<SDL_Rect>(15)), SCREEN_WIDTH(1100),SCREEN_HEIGHT(840), SCREEN_BPP(32), FRAMES_PER_SECOND(10), SPRITE_DOWN(0), SPRITE_UP(1), SPRITE_RIGHT(2), SPRITE_LEFT(3), TDown(4), TUp(5), TRight(6), TLeft(7){} //constructor
 
-bool Sprite::getHasCollided(){return hasCollided;} //returns variable tracking whether object has collided
+bool Sprite::getHasCollided()
+{ // returns variable that indicates if object has collided with another
+  return hasCollided;
+}
 
 void Sprite::apply_surface(SDL_Surface* source, SDL_Surface* destination, SDL_Rect* clip){ //applies new surface
-    //Holds offsets
-    SDL_Rect shift;
-
-    //Get offsets
-    shift.x = offSetX;
-    shift.y = offSetY;
-
-    //Blit
-    SDL_BlitSurface(source, clip, destination, &shift);
-
+  //Holds offsets
+  SDL_Rect shift;
+  
+  //Get offsets
+  shift.x = offSetX;
+  shift.y = offSetY;
+  
+  //Blit
+  SDL_BlitSurface(source, clip, destination, &shift);
+  
 }
 
 SDL_Surface * Sprite::load_image(std::string filename, int r, int g, int b)
@@ -31,22 +34,22 @@ SDL_Surface * Sprite::load_image(std::string filename, int r, int g, int b)
   //Load
   loadedImage = SDL_LoadBMP( filename.c_str() );
   
-    if( loadedImage != NULL )
-      {
-	//Optimize for better performance
-        optimizedImage = SDL_DisplayFormat( loadedImage );
-	
-	SDL_FreeSurface( loadedImage );
-	
-	if( optimizedImage != NULL )
-	  {
-	    SDL_SetColorKey( optimizedImage, SDL_SRCCOLORKEY, SDL_MapRGB( optimizedImage->format, r, g, b ) );
-	  }
-	
-	
-      }
-    return optimizedImage;
-    //return loadedImage;
+  if( loadedImage != NULL )
+    {
+      //Optimize for better performance
+      optimizedImage = SDL_DisplayFormat( loadedImage );
+      
+      SDL_FreeSurface( loadedImage ); //free old one
+      
+      if( optimizedImage != NULL )
+	{
+	  SDL_SetColorKey( optimizedImage, SDL_SRCCOLORKEY, SDL_MapRGB( optimizedImage->format, r, g, b ) );
+	}
+      
+      
+    }
+  return optimizedImage;
+ 
 }
 
  

@@ -8,9 +8,9 @@ class Background
 {
   
  public: 
-  Background(const char *, SDL_Surface *); //takes name of background image
-  void show(SDL_Surface *);
+  Background(const char *, SDL_Surface *); //takes name of background image in current directory
+  void show(SDL_Surface *); //Puts up for display
  private:
   
-  SDL_Surface *picture;
+  SDL_Surface *picture; //pointer to the image
 };

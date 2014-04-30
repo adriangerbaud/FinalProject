@@ -1,4 +1,5 @@
-// Author: Adrian A. Gerbaud H.
+// Author: Adrian A. Gerbaud H., Alejandra Aranguren, Edwin Onattu
+// This is the implementation of the Timer class file
 
 #include"Timer.h"
 #include "SDL/SDL.h"
@@ -6,15 +7,16 @@
 
 Timer::Timer()
 {
-    //Initialize the variables
-    startTicks = 0;
-    pausedTicks = 0;
-    paused = false;
-    started = false;
+  //Initialize the variables
+  startTicks = 0;
+  pausedTicks = 0;
+  paused = false;
+  started = false;
 }
 
 void Timer::start()
 {
+  //Start counting
   started = true;
   paused = false;
   
@@ -24,6 +26,7 @@ void Timer::start()
 
 void Timer::stop()
 {
+  //Stop counting
   started = false;
   paused = false;
 }
@@ -42,7 +45,6 @@ void Timer::pause()
 
 void Timer::unpause()
 {
-  
   if( paused == true )
     {
       paused = false; // unpause

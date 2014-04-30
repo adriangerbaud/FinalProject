@@ -10,84 +10,36 @@
 #include <iostream>
 
 //variables
-const int SCREEN_WIDTH = 1400;
-const int SCREEN_HEIGHT = 800;
+const int SCREEN_WIDTH = 1100;
+const int SCREEN_HEIGHT = 840;
 const int SCREEN_BPP = 32;
 
 const int FRAMES_PER_SECOND = 10;
 SDL_Event event;
 SDL_Surface *screen = NULL;
 
-bool init(){
+bool init()
+{
     //Initialize all SDL subsystems
-    if(SDL_Init(SDL_INIT_EVERYTHING) == -1){
-        return false;
+  if(SDL_Init(SDL_INIT_EVERYTHING) == -1)
+    {
+      return false;
     }
+  
+  //Set up the screen
+  screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE);
 
-    //Set up the screen
-    screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE);
-
-    //If there was an error in setting up the screen
-    if(screen == NULL){
-        return false;
+  //If there was an error in setting up the screen
+  if(screen == NULL)
+    {
+      return false;
     }
-
-    //Set the window caption
-    SDL_WM_SetCaption("Tackle Tag", NULL);
-
-    //If everything initialized fine
-    return true;
+  
+  //Set the window caption
+  SDL_WM_SetCaption("Tackle Tag", NULL);
+  
+  //If everything initialized fine
+  return true;
 }
-
-bool check_collision( SDL_Rect A, SDL_Rect B ){
-    //The sides of the rectangles
-    int leftA, leftB;
-    int rightA, rightB;
-    int topA, topB;
-    int bottomA, bottomB;
-
-    //Calculate the sides of rect A
-    leftA = A.x;
-    rightA = A.x + A.w;
-    topA = A.y;
-    bottomA = A.y + A.h;
-
-    //Calculate the sides of rect B
-    leftB = B.x;
-    rightB = B.x + B.w;
-    topB = B.y;
-    bottomB = B.y + B.h;
-
-    //If any of the sides from A are outside of B
-    if( bottomA <= topB ){
-        return false;
-    }
-
-    if( topA >= bottomB ){
-        return false;
-    }
-
-    if( rightA <= leftB ){
-        return false;
-    }
-
-    if( leftA >= rightB ){
-        return false;
-    }
-
-    //If none of the sides from A are outside B
-    return true;
-}
-
-/*void clean_up(){
-    //Free the surface
-    SDL_FreeSurface(sprite);
-    SDL_FreeSurface(screen);
-    SDL_FreeSurface(obstacle);
-
-    //Quit SDL
-    SDL_Quit();
-    }*/
-
 
 #endif
